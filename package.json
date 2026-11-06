@@ -19,6 +19,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "node --test test/sdk.test.ts",
     "test:docs": "node --test test/docs.test.ts",
+    "prepare": "npm run build",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": { "@types/node": "^22.0.0", "typescript": "^5.9.0" },
