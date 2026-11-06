@@ -1,0 +1,26 @@
+{
+  "name": "@sempera/sdk",
+  "version": "0.1.0",
+  "description": "The official TypeScript client for the Sempera API: typed methods for every operation, retries, idempotency keys, paging and webhook verification",
+  "license": "MIT",
+  "author": "Sempera Labs, Inc. <hello@sempera.org>",
+  "homepage": "https://github.com/Sempera-AI/sempera-node#readme",
+  "repository": { "type": "git", "url": "git+https://github.com/Sempera-AI/sempera-node.git" },
+  "bugs": { "url": "https://github.com/Sempera-AI/sempera-node/issues" },
+  "keywords": ["sempera", "voice", "phone", "ai", "sdk"],
+  "type": "module",
+  "engines": { "node": ">=22.18" },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" } },
+  "files": ["dist", "src", "README.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test test/sdk.test.ts",
+    "test:docs": "node --test test/docs.test.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": { "@types/node": "^22.0.0", "typescript": "^5.9.0" },
+  "publishConfig": { "access": "public" }
+}
