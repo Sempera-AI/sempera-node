@@ -1,5 +1,5 @@
 // GENERATED from the live Sempera OpenAPI document. Do not edit by hand; it is rewritten when the API changes.
-// spec sha256 407e1e6661535ba651988eb9896c1ddf3f1250c492a0374bb6460ec8728d975f
+// spec sha256 8549f43682bf85aca6a2e2cb56db001927fa4a7a8cd2e998bb97c82878949e9d
 
 import { SemperaCore, type OperationSpec, type RequestOptions } from "../runtime.ts";
 import type * as T from "./types.ts";
@@ -10,6 +10,9 @@ export const ERROR_CODES = ["AGENT_ENV_UNPINNED", "CALL_RL_PLAN_ALLOWANCE", "CAL
 export type ErrorCode = (typeof ERROR_CODES)[number];
 
 export const OPERATIONS = {
+  getOauthAuthorizationServer: {"method": "GET", "path": "/.well-known/oauth-authorization-server", "pathParams": [], "query": [], "idempotent": false, "body": null, "response": "json"},
+  getOauthProtectedResource: {"method": "GET", "path": "/.well-known/oauth-protected-resource", "pathParams": [], "query": [], "idempotent": false, "body": null, "response": "json"},
+  getOauthProtectedResourceMcp: {"method": "GET", "path": "/.well-known/oauth-protected-resource/v1/mcp", "pathParams": [], "query": [], "idempotent": false, "body": null, "response": "json"},
   getDocPage: {"method": "GET", "path": "/docs/{page}", "pathParams": ["page"], "query": [], "idempotent": false, "body": null, "response": "text"},
   getLlmsTxt: {"method": "GET", "path": "/llms.txt", "pathParams": [], "query": [], "idempotent": false, "body": null, "response": "text"},
   getOpenApi: {"method": "GET", "path": "/openapi.json", "pathParams": [], "query": [], "idempotent": false, "body": null, "response": "json"},
@@ -192,6 +195,11 @@ export const OPERATIONS = {
   resetMemory: {"method": "POST", "path": "/v1/memory/reset", "pathParams": [], "query": [], "idempotent": false, "body": "json", "response": "json"},
   updateMemory: {"method": "PATCH", "path": "/v1/memory/{memory_id}", "pathParams": ["memory_id"], "query": [], "idempotent": false, "body": "json", "response": "json"},
   listModelsV1: {"method": "GET", "path": "/v1/models", "pathParams": [], "query": [], "idempotent": false, "body": null, "response": "json"},
+  authorizeOauthClient: {"method": "GET", "path": "/v1/oauth/authorize", "pathParams": [], "query": ["client_id", "redirect_uri", "response_type", "code_challenge", "code_challenge_method", "state", "scope", "resource"], "idempotent": false, "body": null, "response": "none"},
+  registerOauthClient: {"method": "POST", "path": "/v1/oauth/register", "pathParams": [], "query": [], "idempotent": false, "body": "json", "response": "json"},
+  exchangeOauthToken: {"method": "POST", "path": "/v1/oauth/token", "pathParams": [], "query": [], "idempotent": false, "body": "form", "response": "json"},
+  listOperationalReviews: {"method": "GET", "path": "/v1/operational-reviews", "pathParams": [], "query": [], "idempotent": false, "body": null, "response": "json"},
+  createOperationalReview: {"method": "POST", "path": "/v1/operational-reviews", "pathParams": [], "query": [], "idempotent": false, "body": "json", "response": "json"},
   getServiceVersion: {"method": "GET", "path": "/v1/org/service-version", "pathParams": [], "query": [], "idempotent": false, "body": null, "response": "json"},
   updateServiceVersion: {"method": "PUT", "path": "/v1/org/service-version", "pathParams": [], "query": [], "idempotent": false, "body": "json", "response": "json"},
   listServiceVersions: {"method": "GET", "path": "/v1/org/service-versions", "pathParams": [], "query": [], "idempotent": false, "body": null, "response": "json"},
@@ -415,6 +423,18 @@ export const OPERATIONS = {
 } as const satisfies Record<string, OperationSpec>;
 
 export class Sempera extends SemperaCore {
+  /** Authorization server metadata (GET /.well-known/oauth-authorization-server) */
+  getOauthAuthorizationServer(options?: RequestOptions): Promise<T.OAuthAuthorizationServer> {
+    return this.call(OPERATIONS.getOauthAuthorizationServer, undefined, undefined, options) as Promise<T.OAuthAuthorizationServer>;
+  }
+  /** Protected resource metadata (GET /.well-known/oauth-protected-resource) */
+  getOauthProtectedResource(options?: RequestOptions): Promise<T.OAuthProtectedResource> {
+    return this.call(OPERATIONS.getOauthProtectedResource, undefined, undefined, options) as Promise<T.OAuthProtectedResource>;
+  }
+  /** Protected resource metadata for the MCP endpoint (GET /.well-known/oauth-protected-resource/v1/mcp) */
+  getOauthProtectedResourceMcp(options?: RequestOptions): Promise<T.OAuthProtectedResource> {
+    return this.call(OPERATIONS.getOauthProtectedResourceMcp, undefined, undefined, options) as Promise<T.OAuthProtectedResource>;
+  }
   /** A developer guide page (Markdown) (GET /docs/{page}) */
   getDocPage(params: { page: string }, options?: RequestOptions): Promise<string> {
     return this.call(OPERATIONS.getDocPage, params, undefined, options) as Promise<string>;
@@ -1142,6 +1162,26 @@ export class Sempera extends SemperaCore {
   /** List Sempera's published TTS models and their capabilities (GET /v1/models, scope models:read) */
   listModelsV1(options?: RequestOptions): Promise<T.ModelListV1> {
     return this.call(OPERATIONS.listModelsV1, undefined, undefined, options) as Promise<T.ModelListV1>;
+  }
+  /** Start an authorization (GET /v1/oauth/authorize) */
+  authorizeOauthClient(params: { client_id: string; redirect_uri?: string; response_type: string; code_challenge: string; code_challenge_method: string; state?: string; scope?: string; resource?: string }, options?: RequestOptions): Promise<void> {
+    return this.call(OPERATIONS.authorizeOauthClient, params, undefined, options) as Promise<void>;
+  }
+  /** Register an OAuth client (POST /v1/oauth/register) */
+  registerOauthClient(body: T.OAuthClientRegistration, options?: RequestOptions): Promise<T.OAuthClient> {
+    return this.call(OPERATIONS.registerOauthClient, undefined, body, options) as Promise<T.OAuthClient>;
+  }
+  /** Swap a code or refresh token (POST /v1/oauth/token) */
+  exchangeOauthToken(body: T.OAuthTokenRequest, options?: RequestOptions): Promise<T.OAuthToken> {
+    return this.call(OPERATIONS.exchangeOauthToken, undefined, body, options) as Promise<T.OAuthToken>;
+  }
+  /** Read operational evidence reviews (GET /v1/operational-reviews, scope workspaces:read) */
+  listOperationalReviews(options?: RequestOptions): Promise<T.OperationalReviewList> {
+    return this.call(OPERATIONS.listOperationalReviews, undefined, undefined, options) as Promise<T.OperationalReviewList>;
+  }
+  /** Record an operational evidence review (POST /v1/operational-reviews, scope workspaces:write) */
+  createOperationalReview(body: T.OperationalReviewCreate, options?: RequestOptions): Promise<T.OperationalReview> {
+    return this.call(OPERATIONS.createOperationalReview, undefined, body, options) as Promise<T.OperationalReview>;
   }
   /** Read the organization's Sempera service pin (GET /v1/org/service-version, scope workspaces:read) */
   getServiceVersion(options?: RequestOptions): Promise<{ version: string; applies_to: ("new_sessions") }> {

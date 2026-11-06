@@ -22,6 +22,14 @@ const json = (status: number, body: unknown, headers: Record<string, string> = {
 const client = (fetchImpl: typeof fetch, extra = {}) => new Sempera({ apiKey: "sempera_sk_test", fetch: fetchImpl, sleep: async () => {}, ...extra });
 const header = (c: Call, name: string) => (c.init.headers as Record<string, string>)[name];
 
+test("OAuth token requests use form encoding, preserving reserved characters", async () => {
+  const { calls, fetchImpl } = scripted(json(200, { access_token: "synthetic", token_type: "Bearer" }));
+  await client(fetchImpl).exchangeOauthToken({ grant_type: "authorization_code", client_id: "client", code: "a+b &c",
+    redirect_uri: "https://client.test/callback", code_verifier: "v".repeat(43) });
+  assert.equal(header(calls[0], "Content-Type"), "application/x-www-form-urlencoded");
+  assert.equal(new URLSearchParams(String(calls[0].init.body)).get("code"), "a+b &c");
+});
+
 test("sends the bearer key, builds the path and query, and returns parsed JSON", async () => {
   const { calls, fetchImpl } = scripted(json(200, { object: "session", id: "ses_1" }));
   const out = await client(fetchImpl).getSession({ session_id: "a b/c", agent_id: "agt_1" });

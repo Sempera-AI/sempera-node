@@ -11,7 +11,7 @@ export interface OperationSpec {
   readonly pathParams: readonly string[];
   readonly query: readonly string[];
   readonly idempotent: boolean;
-  readonly body: "json" | "multipart" | null;
+  readonly body: "json" | "multipart" | "form" | null;
   readonly response: "json" | "text" | "none";
 }
 
@@ -143,6 +143,12 @@ export class SemperaCore {
     let payload: BodyInit | undefined;
     if (body !== undefined) {
       if (op.body === "multipart") payload = body as FormData;
+      else if (op.body === "form") {
+        payload = new URLSearchParams(Object.entries(body as Record<string, unknown>)
+          .filter(([, value]) => value !== undefined && value !== null)
+          .map(([key, value]) => [key, String(value)])).toString();
+        headers["Content-Type"] = "application/x-www-form-urlencoded";
+      }
       else {
         payload = JSON.stringify(body);
         headers["Content-Type"] = "application/json";
